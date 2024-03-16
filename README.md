@@ -79,7 +79,10 @@ pip install -r requirements.txt
 ```
 cd hyena-dna
 git submodule update --init
+
 cd flash-attention
+# ninja是编译加速包，英文flash-attn需要编译，若不安装ninja，编译速读会很慢
+pip intall ninja -i https://pypi.tuna.tsinghua.edu.cn/simple
 git submodule update --init
 pip install -e . --no-build-isolation
 ```
@@ -139,7 +142,7 @@ A quick start for this the repo is to train from scratch on a small genomics dat
 The command below should auto-download a small dataset into `data/`. It uses a small 2 layer HyenaDNA model with a linear decoder (head) on a binary classification task. It already beats the SotA by 7 pts (one task from GenomicBenchmarks), but we can do even better with a pretrained model.
 
 ```
-python -m train wandb=null experiment=hg38/genomic_benchmark_scratch
+python -m train wandb=null experiment=hg38/genomic_benchmark_scratch model.fused_dropout_add_ln=False
 ```
 
 Let's describe this.
@@ -149,6 +152,7 @@ Let's describe this.
 - `train` is calling the main `train.py` script that launches all training / finetuning experiments.
 - `wandb=null`, this connects to wandb too, but for quick testing I set to null.  Otherwise you can use something like `wandb.group=custom_name_here`.
 - `experiment` is passing the config for `experiment`, using the `genomic_benchmark_scratch.yaml` file, located in `configs/experiments/hg38/`.
+- `model.fused_dropout_add_ln=False` when uninstall layer_norm. Installed layer_norm coomand: `cd csrc/layer_norm && pip install .`
 - You can pass other configs in the command line the same way, eg, `dataset=your_custom_datset_name`.  But more on that later.
 
 ## Loading pretrained weights
