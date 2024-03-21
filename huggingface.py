@@ -171,7 +171,7 @@ def inference_single():
     '''
 
     # you only need to select which model to use here, we'll do the rest!
-    pretrained_model_name = 'hyenadna-small-32k-seqlen'
+    pretrained_model_name = 'hyenadna-tiny-1k-seqlen'
 
     max_lengths = {
         'hyenadna-tiny-1k-seqlen': 1024,
@@ -209,7 +209,7 @@ def inference_single():
         model = HyenaDNAPreTrainedModel.from_pretrained(
             './checkpoints',
             pretrained_model_name,
-            download=True,
+            download=False,
             config=backbone_cfg,
             device=device,
             use_head=use_head,
