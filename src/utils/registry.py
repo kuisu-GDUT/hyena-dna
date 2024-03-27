@@ -38,6 +38,7 @@ layer = {
     "h3": "src.models.sequence.h3.H3",
     "h3-conv": "src.models.sequence.h3_conv.H3Conv",
     "hyena": "src.models.sequence.hyena.HyenaOperator",
+    "cnn": "src.models.sequence.gb_basic_cnn.CNN",
     "hyena-filter": "src.models.sequence.hyena.HyenaFilter",
     "vit": "src.models.sequence.mha.VitAttention",
 }
