@@ -13,7 +13,7 @@ model:
   resid_dropout: 0.0
   embed_dropout: 0.1
   fused_mlp: False # figure out how to use fused MLP, maybe only with bf16 + a100
-  fused_dropout_add_ln: True
+  fused_dropout_add_ln: False
   residual_in_fp32: True
   pad_vocab_size_multiple: 8
   layer:

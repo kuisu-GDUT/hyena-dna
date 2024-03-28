@@ -1,6 +1,6 @@
 _name_: nucleotide_transformer  # this links to the overall SequenceDataset of all nucleotide transformer datasets
-dataset_name: enhancer  # this specifies which dataset in nuc trx
-dest_path: null  # path to overall nuc trx datasets
+dataset_name: H3  # this specifies which dataset in nuc trx
+dest_path: /home/sukui/4_project/08_BioLLM/hyena-dna/data/nucleotide_transformer  # path to overall nuc trx datasets
 max_length: ${.${.dataset_name}.max_length}
 d_output: ${.${.dataset_name}.classes} 
 use_padding: True
@@ -26,7 +26,7 @@ H3:
   train_len: 13468
   classes: 2
   max_length: 500
-  metric: mcc
+  metric: accuracy
 H3K4me1:
   train_len: 28509
   classes: 2
