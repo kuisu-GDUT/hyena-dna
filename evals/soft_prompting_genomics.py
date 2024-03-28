@@ -31,8 +31,8 @@ def soft_prompting():
     parser = argparse.ArgumentParser()
     parser.add_argument("--ckpt_path", help="Path to pretrained model checkpoint")
     parser.add_argument("--dataset", default='none')
-    parser.add_argument("--config", default='./configs/evals/soft_prompting_genomics.yaml')
-    parser.add_argument("--results", default='./results/soft_prompting')
+    parser.add_argument("--config", default='../configs/evals/soft_prompting_genomics.yaml')
+    parser.add_argument("--results", default='../results/soft_prompting')
     args = parser.parse_args()
     os.makedirs(args.results, exist_ok=True)
 

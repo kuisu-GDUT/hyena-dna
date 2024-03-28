@@ -45,6 +45,7 @@ tuning:
 
 dataset:
   tokenizer_name: char
+  dest_path: /home/sukui/4_project/08_BioLLM/hyena-dna/data/genomic_benchmark  # Replace with the real path
   batch_size: 2
   rc_aug: True # no augmentation
   shots:
