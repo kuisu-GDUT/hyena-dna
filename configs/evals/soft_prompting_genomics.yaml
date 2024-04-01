@@ -28,15 +28,12 @@ model:
 tuning:
   soft_tokens:
     - 0
-    - 2
-    - 32
-    - 128
+    - 8
+    - 64
     - 512
-    - 2048
-    - 8192
-    - 32768
+    - 4096
   soft_token_pdrop: 0.1 # dropout probability for soft tokens
-  max_epochs: 20
+  max_epochs: 1
   lr: 1e-3
   weight_decay: 0.
   gradient_clip_val: 1.0
@@ -49,10 +46,10 @@ dataset:
   batch_size: 2
   rc_aug: True # no augmentation
   shots:
-    # - 0
+    - 0
     - 2
+    - 8
     - 32
-    - 128
   num_workers: 10
 
 seed: 12345

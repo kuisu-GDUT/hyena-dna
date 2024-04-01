@@ -368,6 +368,16 @@ Soft prompting example run:
 python -m evals/soft_prompting_genomics
 ```
 
+Note:
+```markdown
+- soft_prompt流程：构造输入，2shot表示每个类别的样本构建2个example, 形式为 [input+eos+label]*n+[input+eos].
+- 需要先下载预训练的model，不然很难进行微调. 同时预训练的model参数会全部冻结.
+- soft_prompt计算损失仅考虑label的损失，而input的损失会忽略.
+- 仅训练soft tokens, 其过程是：input_x(b, n) -> embedding(b,n, d) -> add_soft_tokens[(b, n_soft, d) + hidden_feature(b,n,d)]
+-> layers() -> output(根据词汇量两大, 获取概率最大的index) -> loss(仅计算对应label位置的损失)
+- 24GB 显存，允许最大soft_token=8k，batch_size=2, max_length=3200, voc_size=16, shots=2. 所以总的输入tokens约: [8k+32k*4+32k]=168k
+```
+
 instruction fine-tune example:  
 ```
 python -m evals/instruction_tuned_genomics

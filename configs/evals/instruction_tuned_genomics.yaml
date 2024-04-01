@@ -27,7 +27,8 @@ model:
 
 tuning:
   tuning_samples:
-    - 2
+    - 1
+    - 4
     - 16
     - 64
     - 256
@@ -41,12 +42,13 @@ tuning:
 
 dataset:
   tokenizer_name: char
+  dest_path: /home/sukui/4_project/08_BioLLM/hyena-dna/data/genomic_benchmark
   batch_size: 4 # used for data loading & evaluation
   rc_aug: False
   shots:
     - 0
     - 2
-    - 16
+    - 8
     - 32
   num_workers: 10
 

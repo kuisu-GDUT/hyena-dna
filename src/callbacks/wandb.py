@@ -10,7 +10,7 @@ import seaborn as sn
 import torch
 import wandb
 from pytorch_lightning import Callback, Trainer
-from pytorch_lightning.loggers import LoggerCollection, WandbLogger
+from pytorch_lightning.loggers import Logger, WandbLogger
 from pytorch_lightning.utilities import rank_zero_only
 from sklearn import metrics
 from sklearn.metrics import f1_score, precision_score, recall_score
@@ -22,7 +22,7 @@ def get_wandb_logger(trainer: Trainer) -> WandbLogger:
     if isinstance(trainer.logger, WandbLogger):
         return trainer.logger
 
-    if isinstance(trainer.logger, LoggerCollection):
+    if isinstance(trainer.logger, Logger):
         for logger in trainer.logger:
             if isinstance(logger, WandbLogger):
                 return logger
@@ -35,14 +35,18 @@ def get_wandb_logger(trainer: Trainer) -> WandbLogger:
 class WatchModel(Callback):
     """Make wandb watch model at the beginning of the run."""
 
-    def __init__(self, log: str = "gradients", log_freq: int = 100):
+    def __init__(self, log: str = "all", log_freq: int = 100):
         self.log = log
         self.log_freq = log_freq
 
     @rank_zero_only
     def on_train_start(self, trainer, pl_module):
         logger = get_wandb_logger(trainer=trainer)
-        logger.watch(model=trainer.model, log=self.log, log_freq=self.log_freq)
+        if self.log not in ["all", "gradients"]:
+            log = "all"
+        else:
+            log = self.log
+        logger.watch(model=trainer.model, log=log, log_freq=self.log_freq)
 
 
 class UploadCodeAsArtifact(Callback):

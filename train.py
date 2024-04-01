@@ -8,6 +8,7 @@ from typing import Callable, List, Sequence
 import hydra
 import numpy as np
 import pytorch_lightning as pl
+import rootutils
 import torch
 import torch.nn as nn
 import wandb
@@ -28,7 +29,7 @@ from src.utils import registry
 from src.utils.optim_groups import add_optimizer_hooks
 
 log = src.utils.train.get_logger(__name__)
-
+rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 # Turn on TensorFloat32 (speeds up large model training substantially)
 import torch.backends
 torch.backends.cuda.matmul.allow_tf32 = True
@@ -641,7 +642,7 @@ def create_trainer(config, **kwargs):
         trainer_config_dict['strategy'] = DDPStrategy(find_unused_parameters=False, gradient_as_bucket_view=True)
         trainer = pl.Trainer(**trainer_config_dict, callbacks=callbacks, logger=logger)
     else:
-        trainer = hydra.utils.instantiate(config.trainer, callbacks=callbacks, logger=logger)    
+        trainer = hydra.utils.instantiate(config.trainer, callbacks=callbacks, logger=logger)
 
     return trainer
 

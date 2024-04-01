@@ -61,6 +61,7 @@ wandb:
   job_type: training
   mode: online # choices=['online', 'offline', 'disabled']
   name: null
+  log_model: "all"
   save_dir: "."
   id: ${.name} # pass correct id to resume experiment!
   # Below options should not need to be specified

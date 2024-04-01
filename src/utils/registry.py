@@ -55,7 +55,9 @@ callbacks = {
     "progressive_resizing": "src.callbacks.progressive_resizing.ProgressiveResizing",
     "seqlen_warmup": "src.callbacks.seqlen_warmup.SeqlenWarmup",
     "seqlen_warmup_reload": "src.callbacks.seqlen_warmup_reload.SeqlenWarmupReload",
-    "gpu_affinity": "src.callbacks.gpu_affinity.GpuAffinity"
+    # "gpu_affinity": "src.callbacks.gpu_affinity.GpuAffinity",
+    "upload_code_as_artifact": "src.callbacks.wandb.UploadCodeAsArtifact",
+    "watch_model": "src.callbacks.wandb.WatchModel"
 }
 
 model_state_hook = {

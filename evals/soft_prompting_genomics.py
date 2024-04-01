@@ -63,12 +63,12 @@ def soft_prompting():
     characters = nuc_chars # + chrom_names
     label_to_token = {0: 'A', 1: 'N'}
     datasets = {
-        'dummy_mouse_enhancers_ensembl': {
-            'max_length': 3200,
-            'd_output': 2,
-            'characters': characters,
-            'label_to_token': label_to_token,
-        },
+        # 'dummy_mouse_enhancers_ensembl': {
+        #     'max_length': 3200,
+        #     'd_output': 2,
+        #     'characters': characters,
+        #     'label_to_token': label_to_token,
+        # },
         # 'demo_coding_vs_intergenomic_seqs': {
         #     'max_length': 202,
         #     'd_output': 2,
@@ -87,30 +87,30 @@ def soft_prompting():
             'characters': characters,
             'label_to_token': label_to_token,
         },
-        'human_nontata_promoters': {
-            'max_length': 251, #253
-            'd_output': 2,
-            'characters': characters,
-            'label_to_token': label_to_token,
-        },
-        'human_enhancers_ensembl': {
-            'max_length': 320,
-            'd_output': 2,
-            'characters': characters,
-            'label_to_token': label_to_token,
-        },
-        'human_ensembl_regulatory': {
-            'max_length': 600,
-            'd_output': 3,
-            'characters': characters,
-            'label_to_token': {0: 'A', 1: 'G', 2: 'N'},
-        },
-        'human_ocr_ensembl': {
-            'max_length': 420,
-            'd_output': 2,
-            'characters': characters,
-            'label_to_token': label_to_token,
-        }
+        # 'human_nontata_promoters': {
+        #     'max_length': 251, #253
+        #     'd_output': 2,
+        #     'characters': characters,
+        #     'label_to_token': label_to_token,
+        # },
+        # 'human_enhancers_ensembl': {
+        #     'max_length': 320,
+        #     'd_output': 2,
+        #     'characters': characters,
+        #     'label_to_token': label_to_token,
+        # },
+        # 'human_ensembl_regulatory': {
+        #     'max_length': 600,
+        #     'd_output': 3,
+        #     'characters': characters,
+        #     'label_to_token': {0: 'A', 1: 'G', 2: 'N'},
+        # },
+        # 'human_ocr_ensembl': {
+        #     'max_length': 420,
+        #     'd_output': 2,
+        #     'characters': characters,
+        #     'label_to_token': label_to_token,
+        # }
     }
 
     df_results = []

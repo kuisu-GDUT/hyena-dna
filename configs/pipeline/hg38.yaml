@@ -5,7 +5,7 @@ defaults:
   - /dataset: hg38
   - /optimizer: adamw
   - /scheduler: cosine_warmup
-  - /callbacks: [base, checkpoint]
+  - /callbacks: [base, checkpoint, rich, wandb]
 
 train:
   monitor: test/loss

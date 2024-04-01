@@ -36,8 +36,8 @@ def instruction_tuned_ICL():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--ckpt_path", help="Path to pretrained model checkpoint")
-    parser.add_argument("--config", default='./configs/evals/instruction_tuned_genomics.yaml')
-    parser.add_argument("--results", default='./results/instruction_tuned_genomics')
+    parser.add_argument("--config", default='../configs/evals/instruction_tuned_genomics.yaml')
+    parser.add_argument("--results", default='../results/instruction_tuned_genomics')
     args = parser.parse_args()
     os.makedirs(args.results, exist_ok=True)
 
@@ -71,30 +71,30 @@ def instruction_tuned_ICL():
             'characters': characters,
             'label_to_token': label_to_token,
         },
-        'human_nontata_promoters': {
-            'max_length': 251, #253
-            'd_output': 2,
-            'characters': characters,
-            'label_to_token': label_to_token,
-        },
-        'human_enhancers_ensembl': {
-            'max_length': 320,
-            'd_output': 2,
-            'characters': characters,
-            'label_to_token': label_to_token,
-        },
-        'human_ensembl_regulatory': {
-            'max_length': 600,
-            'd_output': 3,
-            'characters': characters,
-            'label_to_token': {0: 'A', 1: 'G', 2: 'N'},
-        },
-        'human_ocr_ensembl': {
-            'max_length': 420,
-            'd_output': 2,
-            'characters': characters,
-            'label_to_token': label_to_token,
-        }
+        # 'human_nontata_promoters': {
+        #     'max_length': 251, #253
+        #     'd_output': 2,
+        #     'characters': characters,
+        #     'label_to_token': label_to_token,
+        # },
+        # 'human_enhancers_ensembl': {
+        #     'max_length': 320,
+        #     'd_output': 2,
+        #     'characters': characters,
+        #     'label_to_token': label_to_token,
+        # },
+        # 'human_ensembl_regulatory': {
+        #     'max_length': 600,
+        #     'd_output': 3,
+        #     'characters': characters,
+        #     'label_to_token': {0: 'A', 1: 'G', 2: 'N'},
+        # },
+        # 'human_ocr_ensembl': {
+        #     'max_length': 420,
+        #     'd_output': 2,
+        #     'characters': characters,
+        #     'label_to_token': label_to_token,
+        # }
     }
 
     print('\n\nEvaluating instruction-tuned ICL performance... ')
