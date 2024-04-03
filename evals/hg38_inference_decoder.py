@@ -13,8 +13,8 @@ from src.dataloaders import SequenceDataset
 import numpy as np
 
 from src.dataloaders.datasets.hg38_char_tokenizer import CharacterTokenizer
-from src.dataloaders.genomic_bench_dataloader import GenomicBenchmark
-from src.dataloaders.nucleotide_transformer_dataloader import NucleotideTransformer
+from src.dataloaders.genomics import GenomicBenchmark
+from src.dataloaders.genomics import NucleotideTransformer
 
 try:
     from tokenizers import Tokenizer  

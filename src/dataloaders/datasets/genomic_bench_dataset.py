@@ -223,7 +223,7 @@ if __name__ == '__main__':
 
     max_length = 300  # max len of seq grabbed
     use_padding = True
-    dest_path = "data/genomic_benchmark/"
+    dest_path = "/home/sukui/4_project/08_BioLLM/hyena-dna/data/genomic_benchmark"
     return_mask = True
     add_eos = True
     padding_side = 'right'    
@@ -246,8 +246,8 @@ if __name__ == '__main__':
         add_eos=add_eos,
     )
 
-    # it = iter(ds)
-    # elem = next(it)
-    # print('elem[0].shape', elem[0].shape)
-    # print(elem)
-    # breakpoint()
+    it = iter(ds)
+    elem = next(it)
+    print('elem[0].shape', elem[0].shape)
+    print(elem)
+    breakpoint()

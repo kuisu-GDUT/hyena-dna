@@ -46,14 +46,14 @@ class CheckpointedModule(torch.nn.Module):
 
 
 def create_mixer_cls(
-    layer=None,
-    process_group=None,
-    attn_layer_idx=None,
-    attn_cfg=None,
-    layer_idx=None,
-    sequence_parallel=True,
-    device=None,
-    dtype=None,
+        layer=None,
+        process_group=None,
+        attn_layer_idx=None,
+        attn_cfg=None,
+        layer_idx=None,
+        sequence_parallel=True,
+        device=None,
+        dtype=None,
 ):
     factory_kwargs = {"device": device, "dtype": dtype}
     parallel_kwargs = (
@@ -100,14 +100,14 @@ def create_mixer_cls(
 
 
 def create_mlp_cls(
-    d_model,
-    d_inner=None,
-    process_group=None,
-    fused_mlp=False,
-    sequence_parallel=True,
-    identity_mlp=False,
-    device=None,
-    dtype=None,
+        d_model,
+        d_inner=None,
+        process_group=None,
+        fused_mlp=False,
+        sequence_parallel=True,
+        identity_mlp=False,
+        device=None,
+        dtype=None,
 ):
     factory_kwargs = {"device": device, "dtype": dtype}
     inner_dim = d_inner if d_inner is not None else 4 * d_model
@@ -137,25 +137,25 @@ def create_mlp_cls(
 
 
 def create_block(
-    d_model,
-    d_inner=None,
-    process_group=None,
-    layer=None,
-    attn_layer_idx=None,
-    attn_cfg=None,
-    layer_norm_epsilon=1e-5,
-    resid_dropout1=0.0,
-    resid_dropout2=0.0,
-    residual_in_fp32=False,
-    fused_mlp=False,
-    identity_mlp=False,
-    fused_dropout_add_ln=False,
-    layer_idx=None,
-    sequence_parallel=True,
-    checkpoint_mlp=False,
-    checkpoint_mixer=False,
-    device=None,
-    dtype=None,
+        d_model,
+        d_inner=None,
+        process_group=None,
+        layer=None,
+        attn_layer_idx=None,
+        attn_cfg=None,
+        layer_norm_epsilon=1e-5,
+        resid_dropout1=0.0,
+        resid_dropout2=0.0,
+        residual_in_fp32=False,
+        fused_mlp=False,
+        identity_mlp=False,
+        fused_dropout_add_ln=False,
+        layer_idx=None,
+        sequence_parallel=True,
+        checkpoint_mlp=False,
+        checkpoint_mixer=False,
+        device=None,
+        dtype=None,
 ):
     factory_kwargs = {"device": device, "dtype": dtype}
     mixer_cls = create_mixer_cls(
@@ -202,11 +202,11 @@ def create_block(
 
 # https://github.com/huggingface/transformers/blob/c28d04e9e252a1a099944e325685f14d242ecdcd/src/transformers/models/gpt2/modeling_gpt2.py#L454
 def _init_weights(
-    module,
-    n_layer,
-    initializer_range=0.02,
-    rescale_prenorm_residual=True,
-    glu_act=False,
+        module,
+        n_layer,
+        initializer_range=0.02,
+        rescale_prenorm_residual=True,
+        glu_act=False,
 ):
     if isinstance(module, nn.Linear):
         nn.init.normal_(module.weight, std=initializer_range)
@@ -248,31 +248,31 @@ def _init_weights(
 
 class LMBackbone(nn.Module):
     def __init__(
-        self,
-        d_model: int,
-        n_layer: int,
-        d_inner: int,
-        vocab_size: int,
-        process_group=None,
-        layer=None,
-        attn_layer_idx=None,
-        attn_cfg=None,
-        max_position_embeddings=0,
-        resid_dropout: float = 0.0,
-        embed_dropout: float = 0.1,
-        dropout_cls=nn.Dropout,
-        layer_norm_epsilon: float = 1e-5,
-        initializer_cfg=None,
-        fused_mlp=False,
-        identity_mlp=False,
-        fused_dropout_add_ln=False,
-        residual_in_fp32=False,
-        sequence_parallel=True,
-        checkpoint_mlp=False,
-        checkpoint_mixer=False,
-        device=None,
-        dtype=None,
-        **kwargs,
+            self,
+            d_model: int,
+            n_layer: int,
+            d_inner: int,
+            vocab_size: int,
+            process_group=None,
+            layer=None,
+            attn_layer_idx=None,
+            attn_cfg=None,
+            max_position_embeddings=0,
+            resid_dropout: float = 0.0,
+            embed_dropout: float = 0.1,
+            dropout_cls=nn.Dropout,
+            layer_norm_epsilon: float = 1e-5,
+            initializer_cfg=None,
+            fused_mlp=False,
+            identity_mlp=False,
+            fused_dropout_add_ln=False,
+            residual_in_fp32=False,
+            sequence_parallel=True,
+            checkpoint_mlp=False,
+            checkpoint_mixer=False,
+            device=None,
+            dtype=None,
+            **kwargs,
     ) -> None:
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
@@ -399,38 +399,39 @@ class LMBackbone(nn.Module):
 
 class ConvLMHeadModel(nn.Module, GenerationMixin):
     def __init__(
-        self,
-        d_model: int,
-        n_layer: int,
-        d_inner: int,
-        vocab_size: int,
-        process_group=None,
-        layer=None,
-        attn_layer_idx=None,
-        attn_cfg=None,
-        max_position_embeddings=0,
-        resid_dropout: float = 0.0,
-        embed_dropout: float = 0.1,
-        dropout_cls=nn.Dropout,
-        layer_norm_epsilon: float = 1e-5,
-        initializer_cfg=None,
-        fused_mlp=False,
-        fused_dropout_add_ln=False,
-        residual_in_fp32=False,
-        pad_vocab_size_multiple: int = 1,
-        sequence_parallel=True,
-        checkpoint_mlp=False,
-        checkpoint_mixer=False,
-        device=None,
-        dtype=None,
-        **kwargs,
+            self,
+            d_model: int,
+            n_layer: int,
+            d_inner: int,
+            vocab_size: int,
+            process_group=None,
+            layer=None,
+            attn_layer_idx=None,
+            attn_cfg=None,
+            max_position_embeddings=0,
+            resid_dropout: float = 0.0,
+            embed_dropout: float = 0.1,
+            dropout_cls=nn.Dropout,
+            layer_norm_epsilon: float = 1e-5,
+            initializer_cfg=None,
+            fused_mlp=False,
+            fused_dropout_add_ln=False,
+            residual_in_fp32=False,
+            pad_vocab_size_multiple: int = 1,
+            sequence_parallel=True,
+            checkpoint_mlp=False,
+            checkpoint_mixer=False,
+            device=None,
+            dtype=None,
+            **kwargs,
     ) -> None:
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
         self.process_group = process_group
+        self.d_model = d_model
         if vocab_size % pad_vocab_size_multiple != 0:
             vocab_size += pad_vocab_size_multiple - (
-                vocab_size % pad_vocab_size_multiple
+                    vocab_size % pad_vocab_size_multiple
             )
         self.backbone = LMBackbone(
             d_model=d_model,
@@ -485,7 +486,7 @@ class ConvLMHeadModel(nn.Module, GenerationMixin):
             sync_shared_params(self, self.process_group)
 
     def forward(
-        self, input_ids, position_ids=None, inference_params=None, state=None
+            self, input_ids, position_ids=None, inference_params=None, state=None
     ):  # state for the repo interface
         hidden_states = self.backbone(
             input_ids, position_ids=position_ids, inference_params=inference_params
@@ -498,8 +499,17 @@ class ConvLMHeadModel(nn.Module, GenerationMixin):
                 lm_logits = rearrange(
                     lm_logits, "(n b) s d -> b s (n d)", b=hidden_states.shape[0]
                 )
-        CausalLMOutput = namedtuple("CausalLMOutput", ["logits"])
-        return CausalLMOutput(logits=lm_logits), None
+        # CausalLMOutput = namedtuple("CausalLMOutput", ["logits"])
+        return lm_logits, None
+
+    @property
+    def d_output(self):
+        """Model /embedding dimension, used for decoder mapping.
+
+        """
+        if getattr(self, "d_model", None) is None:
+            raise NotImplementedError("SequenceModule instantiation must set d_output")
+        return self.lm_head.out_features
 
 
 class DNAEmbeddingModel(nn.Module, GenerationMixin):
@@ -550,7 +560,7 @@ class DNAEmbeddingModel(nn.Module, GenerationMixin):
         if self.process_group is not None:
             sync_shared_params(self, self.process_group)
 
-    def forward(self, input_ids, position_ids=None, inference_params=None, state=None): # state for the repo interface
+    def forward(self, input_ids, position_ids=None, inference_params=None, state=None):  # state for the repo interface
         hidden_states = self.backbone(input_ids, position_ids=position_ids,
                                       inference_params=inference_params)
         # we only need the last hidden state for embeddings (decoder head will predict classification task)
@@ -594,7 +604,7 @@ def load_backbone(model, state_dict, freeze_backbone=False, ignore_head=True):
 
         loaded_params = state_dict.get(key, None)
         # make sure key is in the loaded params first, if not, then print it out
-    
+
         if loaded_params is None:
             # This should never happen, it should be there!
             print("Missing key in pretrained model!", key)
@@ -638,7 +648,7 @@ def shard_state_dict_tp(state_dict, world_size, rank, pad_vocab_size_multiple=1)
     vocab_size = state_dict["backbone.embeddings.word_embeddings.weight"].shape[0]
     inner_dim, hidden_size = state_dict["backbone.layers.0.mlp.fc1.weight"].shape
     vocab_size = (
-        math.ceil(vocab_size / pad_vocab_size_multiple) * pad_vocab_size_multiple
+            math.ceil(vocab_size / pad_vocab_size_multiple) * pad_vocab_size_multiple
     )
     assert vocab_size % world_size == 0
     assert hidden_size % world_size == 0
@@ -653,7 +663,7 @@ def shard_state_dict_tp(state_dict, world_size, rank, pad_vocab_size_multiple=1)
         x = rearrange(state_dict[key], "(three d) ... -> three d ...", three=3)
         dim = x.shape[1] // world_size
         state_dict[key] = rearrange(
-            x[:, rank * dim : (rank + 1) * dim], "three d ... -> (three d) ..."
+            x[:, rank * dim: (rank + 1) * dim], "three d ... -> (three d) ..."
         )
 
     shard_dim(state_dict, "backbone.embeddings.word_embeddings.weight", 0)
