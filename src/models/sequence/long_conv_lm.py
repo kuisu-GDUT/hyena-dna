@@ -499,8 +499,8 @@ class ConvLMHeadModel(nn.Module, GenerationMixin):
                 lm_logits = rearrange(
                     lm_logits, "(n b) s d -> b s (n d)", b=hidden_states.shape[0]
                 )
-        # CausalLMOutput = namedtuple("CausalLMOutput", ["logits"])
-        return lm_logits, None
+        CausalLMOutput = namedtuple("CausalLMOutput", ["logits"])
+        return CausalLMOutput(logits=lm_logits), None
 
     @property
     def d_output(self):

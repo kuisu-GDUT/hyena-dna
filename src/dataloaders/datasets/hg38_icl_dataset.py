@@ -6,7 +6,7 @@ import functools
 import json
 from pathlib import Path
 from pyfaidx import Fasta
-import polars as pl
+# import polars as pl
 import pandas as pd
 import torch
 from random import randrange, random, randint

@@ -694,6 +694,11 @@ In practice, for short range tasks with not a lot padding, we noticed it didn't 
 - Added some tips on [pretraining](#pretraining_custom) your on your own data.
 - Example to get [logits](#logits) from pretrained model.
 
+## WUCHAO RUN
+1. 在武超上走从头训练
+2. 目前不能使用polars，所以都注释掉
+3. ConvLMHeadModel输出需要有logits
+4. 目前武超仅支持pl>2.x版本，需要将trainer的test_epoch_end的方法替换为on_test_epoch_end.
 
 ## Citation
 

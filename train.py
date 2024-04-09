@@ -365,27 +365,27 @@ class SequenceLightningModule(pl.LightningModule):
         # Reset training torchmetrics
         self.task._reset_torchmetrics("train")
 
-    def training_epoch_end(self, outputs):
-        # Log training torchmetrics
-        super().training_epoch_end(outputs)
+    # def on_train_epoch_end(self, outputs):
+    #     # Log training torchmetrics
+    #     super().on_train_epoch_end(outputs)
 
     def on_validation_epoch_start(self):
         # Reset all validation torchmetrics
         for name in self.val_loader_names:
             self.task._reset_torchmetrics(name)
-
-    def validation_epoch_end(self, outputs):
-        # Log all validation torchmetrics
-        super().validation_epoch_end(outputs)
+    #
+    # def on_validation_epoch_end(self, outputs):
+    #     # Log all validation torchmetrics
+    #     super().on_validation_epoch_end(outputs)
 
     def on_test_epoch_start(self):
         # Reset all test torchmetrics
         for name in self.test_loader_names:
             self.task._reset_torchmetrics(name)
 
-    def test_epoch_end(self, outputs):
-        # Log all test torchmetrics
-        super().test_epoch_end(outputs)
+    # def on_test_epoch_end(self, outputs):
+    #     # Log all test torchmetrics
+    #     super().on_test_epoch_end(outputs)
 
     def training_step(self, batch, batch_idx, dataloader_idx=0):
         loss = self._shared_step(batch, batch_idx, prefix="train")

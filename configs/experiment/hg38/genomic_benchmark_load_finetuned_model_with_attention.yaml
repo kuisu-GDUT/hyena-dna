@@ -90,4 +90,4 @@ train:
   pretrained_model_path: /home/sukui/4_project/08_BioLLM/hyena-dna/outputs/2024-04-01/10-27-05-542413/checkpoints/last.ckpt
   pretrained_model_state_hook:
     _name_: load_backbone
-    freeze_backbone: false  # seems to work much better if false (ie finetune entire model)
+    freeze_backbone: true  # seems to work much better if false (ie finetune entire model)
