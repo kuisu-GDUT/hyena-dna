@@ -14,6 +14,7 @@ import torch.nn as nn
 import wandb
 from hydra.utils import get_original_cwd
 from omegaconf import DictConfig, OmegaConf
+from pytorch_lightning.callbacks import GradientAccumulationScheduler
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.utilities import rank_zero_only, rank_zero_warn
 from pytorch_lightning.strategies.ddp import DDPStrategy
@@ -309,7 +310,7 @@ class SequenceLightningModule(pl.LightningModule):
         return self.task.forward(batch, self.encoder, self.model, self.decoder, self._state)
 
     def step(self, x_t):
-        x_t, *_ = self.encoder(x_t) # Potential edge case for encoders that expect (B, L, H)?
+        x_t, *_ = self.encoder(x_t)  # Potential edge case for encoders that expect (B, L, H)?
         x_t, state = self.model.step(x_t, state=self._state)
         self._state = state
         # x_t = x_t[:, None, ...] # Dummy length
@@ -337,7 +338,7 @@ class SequenceLightningModule(pl.LightningModule):
         # Calculate torchmetrics
         torchmetrics = getattr(self, f'{prefix}_torchmetrics')
         torchmetrics(x, y, loss=loss)
-        
+
         log_on_step = 'eval' in self.hparams and self.hparams.eval.get('log_on_step', False) and prefix == 'train'
 
         self.log_dict(
@@ -373,6 +374,7 @@ class SequenceLightningModule(pl.LightningModule):
         # Reset all validation torchmetrics
         for name in self.val_loader_names:
             self.task._reset_torchmetrics(name)
+
     #
     # def on_validation_epoch_end(self, outputs):
     #     # Log all validation torchmetrics
@@ -423,8 +425,8 @@ class SequenceLightningModule(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx, dataloader_idx=0):
         ema = (
-            self.val_loader_names[dataloader_idx].endswith("/ema")
-            and self.optimizers().optimizer.stepped
+                self.val_loader_names[dataloader_idx].endswith("/ema")
+                and self.optimizers().optimizer.stepped
         )  # There's a bit of an annoying edge case with the first (0-th) epoch; it has to be excluded due to the initial sanity check
         if ema:
             self.optimizers().swap_ema()
@@ -497,7 +499,8 @@ class SequenceLightningModule(pl.LightningModule):
 
             # Update lr for each layer
             for layer_id, group in layer_wise_groups.items():
-                group['lr'] = self.hparams.optimizer.lr * (self.hparams.train.layer_decay.decay ** (num_max_layers - layer_id))
+                group['lr'] = self.hparams.optimizer.lr * (
+                        self.hparams.train.layer_decay.decay ** (num_max_layers - layer_id))
 
             # Reset the torch optimizer's param groups
             optimizer.param_groups = []
@@ -530,8 +533,8 @@ class SequenceLightningModule(pl.LightningModule):
         """Process loaders into a list of names and loaders"""
         if utils.is_dict(loaders):
             return [
-                f"{prefix}/{k}" if k is not None else prefix for k in loaders.keys()
-            ], list(loaders.values())
+                       f"{prefix}/{k}" if k is not None else prefix for k in loaders.keys()
+                   ], list(loaders.values())
         elif utils.is_list(loaders):
             return [f"{prefix}/{i}" for i in range(len(loaders))], loaders
         else:
@@ -617,7 +620,8 @@ def create_trainer(config, **kwargs):
         config.trainer.strategy = dict(
             _target_='pytorch_lightning.strategies.DDPStrategy',
             find_unused_parameters=False,
-            gradient_as_bucket_view=True,  # https://pytorch-lightning.readthedocs.io/en/stable/advanced/advanced_gpu.html#ddp-optimizations
+            gradient_as_bucket_view=True,
+            # https://pytorch-lightning.readthedocs.io/en/stable/advanced/advanced_gpu.html#ddp-optimizations
         )
 
     # Init lightning trainer
@@ -635,10 +639,14 @@ def create_trainer(config, **kwargs):
             grad_accum_factor = config.train.global_batch_size // batch_size  # grad accum factor for this stage
             accumulate_grad_schedule[epochs_cume] = grad_accum_factor  # set the grad accum factor for this stage
             epochs_cume += stage['epochs']  # increment epochs_cume for next stage
-        trainer_config_dict['accumulate_grad_batches'] = accumulate_grad_schedule  # set the accumulate_grad_batches schedule
+        # NOTE: PL < 2.x
+        # trainer_config_dict['accumulate_grad_batches'] = accumulate_grad_schedule  # set the accumulate_grad_batches schedule
+        # NOTE: PL > 2.x
+        callbacks.append(GradientAccumulationScheduler(scheduling=accumulate_grad_schedule))
         trainer_config_dict.pop('_target_')  # only hydra uses this to instantiate
         # Set DDPStrategy to work with pl.Trainer
-        config.trainer.pop('strategy')
+        if "strategy" in config.trainer:
+            config.trainer.pop('strategy')
         trainer_config_dict['strategy'] = DDPStrategy(find_unused_parameters=False, gradient_as_bucket_view=True)
         trainer = pl.Trainer(**trainer_config_dict, callbacks=callbacks, logger=logger)
     else:
@@ -675,11 +683,8 @@ def train(config):
         trainer.test(model)
 
 
-
-
 @hydra.main(config_path="configs", config_name="config.yaml")
 def main(config: OmegaConf):
-
     # Process config:
     # - register evaluation resolver
     # - filter out keys used only for interpolation

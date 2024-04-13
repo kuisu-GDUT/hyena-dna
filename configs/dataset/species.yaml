@@ -1,7 +1,7 @@
 _name_: species
 dataset_name: species
-species_dir: '/local-scratch/nigam/projects/mwornow/projects/safari-internal/data/species'
-species: [chimpanzee,hippo]
+species_dir: '/home/share/huadjyin/home/s_sukui/03_project/01_GeneLLM/hyena-dna/data/species1'
+species: [human, hippo, lemur, mouse, pig]
 total_size: 1000
 max_length: 1024
 species_weights: uniform
