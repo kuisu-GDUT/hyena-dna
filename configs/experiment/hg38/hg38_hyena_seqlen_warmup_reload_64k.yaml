@@ -38,11 +38,11 @@ task:
 trainer:
   accelerator: gpu
   devices:
-    - 3
+    - 1
+    - 2
     - 0
-#    - 0
   num_nodes: 1
-  # accumulate_grad_batches: ${div_up:${train.global_batch_size}, ${eval:${trainer.devices} * ${dataset.batch_size} * ${trainer.num_nodes}}}
+#   accumulate_grad_batches: ${div_up:${train.global_batch_size}, ${eval:${trainer.devices} * ${dataset.batch_size} * ${trainer.num_nodes}}}
   max_epochs: 100
   precision: 16  # bf16 only a100
   gradient_clip_val: 1.0
@@ -53,31 +53,31 @@ callbacks:
     # epochs refers to how long to run at that stage (not cummulative!)
     # this is just a sample
     stage_params:
-      - epochs: 2  # means run this stage for 2 epochs (0, and 1)
+      - epochs: 10  # means run this stage for 2 epochs (0, and 1)
         seq_len: 1024
-        batch_size: 256  # grad accum = 1, since train.global_batch_size=256, 是最大batch size
-      - epochs: 2  # run for 2 epochs (2 and 3)
+        batch_size: 2048  # grad accum = 1, since train.global_batch_size=256
+      - epochs: 10  # run for 2 epochs (2 and 3)
         seq_len: 2048
-        batch_size: 128
-      - epochs: 2  # run for epochs 4, 5
+        batch_size: 1024
+      - epochs: 10  # run for epochs 4, 5
         seq_len: 4096  #
-        batch_size: 64  # batch size第二大，此时grad accum = 2, max_batch_size // batch_size
-      - epochs: 2  # epoch 6, 7
+        batch_size: 512
+      - epochs: 10  # epoch 6, 7
         seq_len: 8192  
-        batch_size: 32
-      - epochs: 4  #  epoch 8, 9, 10, 11
+        batch_size: 256
+      - epochs: 10  #  epoch 8, 9, 10, 11
         seq_len: 16_384  # 
-        batch_size: 16
-      - epochs: 4  # epoch 12, 13, 14, 15
+        batch_size: 128
+      - epochs: 10  # epoch 12, 13, 14, 15
         seq_len: 32_768
-        batch_size: 8
-      - epochs: 4  # epoch 16, 17, 18, 19
+        batch_size: 64
+      - epochs: 10  # epoch 12, 13, 14, 15
         seq_len: 65_536
-        batch_size: 4
+        batch_size: 32
 
 dataset:
   # batch_size: 32  # Per GPU
-  batch_size: 4  # this is the test batch size (and final train batch size)
+  batch_size: 32  # this is the test batch size (and final train batch size)
   max_length: 65_536 # note this is the test max length (and the final train max_length) + 2
   # optional, default is max_length
   max_length_val: ${dataset.max_length}
@@ -86,7 +86,7 @@ dataset:
   pad_max_length: null  # needed for bpe tokenizer only
   add_eos: true
   rc_aug: false
-  num_workers: 2
+  num_workers: 12
 
 scheduler:
   t_in_epochs: False
@@ -102,14 +102,8 @@ optimizer:
 train:
   gpu_mem: ${eval:"round(float(__import__('subprocess').check_output('nvidia-smi -i 0 --query-gpu=memory.total --format=csv,noheader,nounits', shell=True).strip().decode()) / 1000)"}
   seed: 2222
-  global_batch_size: 256  # effects the scheduler, need to set properly
-  remove_test_loader_in_eval: True
-  pretrained_model_strict_load: True  # false allows encoder/decoder to be used if new model uses it
-  # for loading backbone and not head, requires both of these flags below
-  pretrained_model_path: /home/share/huadjyin/home/s_sukui/03_project/01_GeneLLM/hyena-dna/outputs/2024-04-10/17-06-29-028998/checkpoints/val/loss.ckpt
-  validate_at_start: True
-  ckpt: /home/share/huadjyin/home/s_sukui/03_project/01_GeneLLM/hyena-dna/outputs/2024-04-10/17-06-29-028998/checkpoints/val/loss.ckpt
-
+  global_batch_size: 2048  # effects the scheduler, need to set properly
+  remove_test_loader_in_eval: True 
 
 
 

@@ -111,8 +111,9 @@ class SeqlenWarmupReload(Callback):
 
         model.dataset.init_datasets()  # reinit the datasets with new batch size and seq len
 
-        trainer.reset_train_dataloader(model)  # tells PTL to use the new dataloaders/datasets
-        trainer.reset_val_dataloader(model)
+        # trainer.fit(model)  # tells PTL to use the new dataloaders/datasets
+        trainer._data_connector.attach_data(model)  # NOTE: PL>2.x时，需要用这个方式来更新数据加载
+        # trainer.reset_val_dataloader(model)
         print('\tAt epoch {}, changed Seq Len to {}, and batch size to {}'.format(trainer.current_epoch, seq_len, batch_size))
 
     # def _update_model(self, trainer, model):

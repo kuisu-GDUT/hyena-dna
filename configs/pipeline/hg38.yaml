@@ -8,7 +8,7 @@ defaults:
   - /callbacks: [base, checkpoint, rich, wandb]
 
 train:
-  monitor: test/loss
+  monitor: val/loss
   mode: min
 
 task:
