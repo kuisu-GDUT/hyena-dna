@@ -6,7 +6,7 @@ defaults:
 model:
   _name_: lm
   d_model: 32
-  n_layer: 2
+  n_layer: 8
   d_inner: ${eval:4 * ${.d_model}}
   vocab_size: 12
   resid_dropout: 0.0
@@ -37,14 +37,12 @@ task:
 
 trainer:
   accelerator: gpu
-  devices:
-    - 3
-    - 0
+  devices: 1
 #    - 0
   num_nodes: 1
   # accumulate_grad_batches: ${div_up:${train.global_batch_size}, ${eval:${trainer.devices} * ${dataset.batch_size} * ${trainer.num_nodes}}}
   max_epochs: 100
-  precision: 16  # bf16 only a100
+  precision: bf16  # bf16 only a100
   gradient_clip_val: 1.0
   strategy: null
 
@@ -74,11 +72,17 @@ callbacks:
       - epochs: 4  # epoch 16, 17, 18, 19
         seq_len: 65_536
         batch_size: 4
+      - epochs: 4
+        seq_len: 131_072
+        batch_size: 2
+      - epochs: 4
+        seq_len: 230_000
+        batch_size: 1
 
 dataset:
   # batch_size: 32  # Per GPU
-  batch_size: 4  # this is the test batch size (and final train batch size)
-  max_length: 65_536 # note this is the test max length (and the final train max_length) + 2
+  batch_size: 1  # this is the test batch size (and final train batch size)
+  max_length: 230_000 # note this is the test max length (and the final train max_length) + 2
   # optional, default is max_length
   max_length_val: ${dataset.max_length}
   max_length_test: ${dataset.max_length}
@@ -104,11 +108,11 @@ train:
   seed: 2222
   global_batch_size: 256  # effects the scheduler, need to set properly
   remove_test_loader_in_eval: True
-  pretrained_model_strict_load: True  # false allows encoder/decoder to be used if new model uses it
+#  pretrained_model_strict_load: True  # false allows encoder/decoder to be used if new model uses it
   # for loading backbone and not head, requires both of these flags below
-  pretrained_model_path: /home/share/huadjyin/home/s_sukui/03_project/01_GeneLLM/hyena-dna/outputs/2024-04-10/17-06-29-028998/checkpoints/val/loss.ckpt
-  validate_at_start: True
-  ckpt: /home/share/huadjyin/home/s_sukui/03_project/01_GeneLLM/hyena-dna/outputs/2024-04-10/17-06-29-028998/checkpoints/val/loss.ckpt
+#  pretrained_model_path: /home/share/huadjyin/home/s_sukui/03_project/01_GeneLLM/hyena-dna/outputs/2024-04-10/17-06-29-028998/checkpoints/val/loss.ckpt
+#  validate_at_start: True
+#  ckpt: /home/share/huadjyin/home/s_sukui/03_project/01_GeneLLM/hyena-dna/outputs/2024-04-10/17-06-29-028998/checkpoints/val/loss.ckpt
 
 
 

@@ -129,7 +129,7 @@ class SpeciesDataset(torch.utils.data.Dataset):
         self.total_size = total_size
         self.task = task
         self.d_output = len(self.species) if task == 'species_classification' else None
-        is_show_log: bool = True
+        is_show_log: bool = False
         self.remove_tail_ends = remove_tail_ends
         self.cutoff_train = cutoff_train
         self.cutoff_test = cutoff_test
@@ -319,7 +319,6 @@ class SpeciesDataset(torch.utils.data.Dataset):
         # pad with Ns if necessary
         seq = seq.rjust(end - start, "N")
         if len(seq) != self.max_length:
-            print(f"error. start:{start}, end:{end}, len: {len(seq)}, right:{right}, max_len:{self.max_length}")
             seq = seq[:self.max_length]
         assert len(
             seq) == self.max_length, f'Length of sequence ({len(seq)}) from interval ({start}, {end}) of chromosome {chromosome} (len={chromosome_length}) is not equal to `self.max_length` ({self.max_length})'

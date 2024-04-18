@@ -6,7 +6,7 @@ defaults:
 model:
   _name_: dna_embedding
   d_model: 256
-  n_layer: 2
+  n_layer: 8
   d_inner: ${eval:4 * ${.d_model}}
   vocab_size: 12
   resid_dropout: 0.0
@@ -62,7 +62,7 @@ optimizer:
 dataset:
   # batch_size: 32  # Per GPU
   batch_size: 1  # this is the test batch size (and final train batch size)
-  max_length: 786432 # note this is the test max length (and the final train max_length) + 2
+  max_length: 230_000 # note this is the test max length (and the final train max_length) + 2
   # optional, default is max_length
   max_length_val: ${dataset.max_length}
   max_length_test: ${dataset.max_length}
@@ -124,6 +124,9 @@ callbacks:
 #      - epochs: 1
 #        seq_len: 250_000
 #        batch_size: 1
+       - epochs: 1
+         seq_len: 230_000
+         batch_size: 1
        - epochs: 2
          seq_len: 1024
          batch_size: 128
@@ -149,11 +152,11 @@ callbacks:
          seq_len: 131_072
          batch_size: 2
        - epochs: 4
-         seq_len: 262_144
-         batch_size: 2
-       - epochs: 8
-         seq_len: 524_288
+         seq_len: 230_000
          batch_size: 1
-       - epochs: 8
-         seq_len: 786432
-         batch_size: 1
+#       - epochs: 8
+#         seq_len: 450_000
+#         batch_size: 1
+#       - epochs: 8
+#         seq_len: 600_000
+#         batch_size: 1
