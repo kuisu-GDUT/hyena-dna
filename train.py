@@ -222,14 +222,14 @@ class SequenceLightningModule(pl.LightningModule):
     def _check_config(self):
         assert self.hparams.train.state.mode in [None, "none", "null", "reset", "bptt", "tbptt"]
         assert (
-            (n := self.hparams.train.state.n_context) is None
-            or isinstance(n, int)
-            and n >= 0
+                (n := self.hparams.train.state.n_context) is None
+                or isinstance(n, int)
+                and n >= 0
         )
         assert (
-            (n := self.hparams.train.state.n_context_eval) is None
-            or isinstance(n, int)
-            and n >= 0
+                (n := self.hparams.train.state.n_context_eval) is None
+                or isinstance(n, int)
+                and n >= 0
         )
 
     def _initialize_state(self):
