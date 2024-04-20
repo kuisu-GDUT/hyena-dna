@@ -59,7 +59,7 @@ wandb:
   project: dna
   group: ""
   job_type: training
-  mode: online # choices=['online', 'offline', 'disabled']
+  mode: offline # choices=['online', 'offline', 'disabled']
   name: null
   log_model: "all"
   save_dir: "."
